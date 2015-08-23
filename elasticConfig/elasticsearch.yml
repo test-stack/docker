@@ -383,3 +383,7 @@ cluster.name: harness
 # it unless you need it is recommended (it is disabled by default).
 #
 #http.jsonp.enable: true
+
+# Scripting
+in-requests — Also known as dynamic scripting, this is the usage of scripts within the requests/code. By default, dynamic scripting is disabled in Elasticsearch. To enable the dynamic scripting facility, it's necessary to change a script variable in the elasticsearch.yml file (which you can find in the config folder) to read as follows: 
+script.disable_dynamic: false
