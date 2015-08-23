@@ -88,11 +88,11 @@ $ docker run -d --name elastic -p 9200:9200 -p 9300:9300 -v ~/data:/data -v ~/co
 ```
 or with [Marvel](https://www.elastic.co/products/marvel) plugin
 ```
--e PLUGINS=elasticsearch/marvel/latest
+$ docker run -d --name elastic -e PLUGINS=elasticsearch/marvel/latest -p 9200:9200 -p 9300:9300 -v ~/data:/data -v ~/conf:/conf itzg/elasticsearch
 ```
 or with [Elastic HQ](http://www.elastichq.org/index.html) plugin
 ```
--e PLUGINS=royrusso/elasticsearch-HQ
+$ docker run -d --name elastic -e PLUGINS=royrusso/elasticsearch-HQ -p 9200:9200 -p 9300:9300 -v ~/data:/data -v ~/conf:/conf itzg/elasticsearch
 ```
 You can check successful execution:
 ```
