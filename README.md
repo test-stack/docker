@@ -37,28 +37,12 @@ Or via browser `http://localhost:4444/grid/console`. You see grid console with o
 
 ![Grid console](https://raw.githubusercontent.com/test-stack/docker/master/docs/gridConsole.png)
 
-Every node has default configuration, one instance of firefox for webdriver and remote control. That will soon change. You can register next nodes.
+**Docker compose**
 
-```
-$ docker run -d --link selenium-hub:hub selenium/node-chrome:2.47.1
-$ docker run -d --link selenium-hub:hub selenium/node-chrome:2.47.1
-$ docker run -d --link selenium-hub:hub selenium/node-chrome:2.47.1
-```
+move to `/docker/dockerComposes/seleniumGrid/` and run `docker-compose up -d`
 
-We can check it:
-
-```
-$ docker ps
-
-CONTAINER ID        IMAGE                         COMMAND                  CREATED             STATUS              PORTS                    NAMES
-7cd5d8941cd1        selenium/node-chrome:2.47.1   "/opt/bin/entry_point"   3 seconds ago       Up 2 seconds                                 sleepy_kirch
-3c63aad77b15        selenium/node-chrome:2.47.1   "/opt/bin/entry_point"   4 seconds ago       Up 3 seconds                                 cranky_hodgkin
-ffbf4fed89a0        selenium/node-chrome:2.47.1   "/opt/bin/entry_point"   5 seconds ago       Up 4 seconds                                 ecstatic_meitner
-97bea0aeedf2        selenium/node-chrome:2.47.1   "/opt/bin/entry_point"   17 minutes ago      Up 17 minutes                                drunk_heisenberg
-643bb9385c85        selenium/hub:2.47.1           "/opt/bin/entry_point"   17 minutes ago      Up 17 minutes       0.0.0.0:4444->4444/tcp   selenium-hub
-```
-
-and via browser `http://localhost:4444/grid/console`. Now we have one hub and four nodes. We can see on stdout of selenium-hub container about details:
+** Selenium grid nodes**
+Now we have one hub and one node. We can see on stdout of selenium-hub container about details:
 
 ```
 $docker logs selenium-hub

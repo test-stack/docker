@@ -4,7 +4,6 @@ hub:
     - "4444:4444"
   volumes:
     - ~/docker/gridConfig/hub/config.json:/opt/selenium/config.json
-  name:
 ffNode:
   image: selenium/node-firefox:2.50.0
   volumes:
