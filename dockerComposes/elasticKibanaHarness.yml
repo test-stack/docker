@@ -1,0 +1,16 @@
+elasticsearch:
+  image: itzg/elasticsearch
+  ports:
+    - "9200:9200"
+    - "9300:9300"
+  volumes:
+    - ~/data/:/data
+    - ~/conf/:/conf
+  environment:
+    - PLUGINS=royrusso/elasticsearch-HQ
+kibana:
+  image: itzg/kibana
+  ports:
+    - "5601:5601"
+  links:
+    - elasticsearch

@@ -16,12 +16,12 @@ Let's go run [selenium grid via docker](https://github.com/SeleniumHQ/docker-sel
 
 **Run Selenium hub**
 ```
-$ docker run -d -p 4444:4444 --name selenium-hub -e GRID_BROWSER_TIMEOUT=120000 -e GRID_MAX_SESSION=30 selenium/hub:2.46.0
+$ docker run -d -p 4444:4444 --name selenium-hub -e GRID_BROWSER_TIMEOUT=120000 -e GRID_MAX_SESSION=30 selenium/hub:2.47.1
 ```
 
 **Run Selenium node**
 ```
-$ docker run -d --link selenium-hub:hub selenium/node-chrome:2.46.0
+$ docker run -d --link selenium-hub:hub selenium/node-chrome:2.47.1
 ```
 
 That's all :-) You can check successful execution:
@@ -29,8 +29,8 @@ That's all :-) You can check successful execution:
 $ docker ps
 
 CONTAINER ID        IMAGE                         COMMAND                  CREATED             STATUS              PORTS                    NAMES
-97bea0aeedf2        selenium/node-chrome:2.46.0   "/opt/bin/entry_point"   2 seconds ago       Up 2 seconds                                 drunk_heisenberg
-643bb9385c85        selenium/hub:2.46.0           "/opt/bin/entry_point"   25 seconds ago      Up 25 seconds       0.0.0.0:4444->4444/tcp   selenium-hub
+97bea0aeedf2        selenium/node-chrome:2.47.1   "/opt/bin/entry_point"   2 seconds ago       Up 2 seconds                                 drunk_heisenberg
+643bb9385c85        selenium/hub:2.47.1           "/opt/bin/entry_point"   25 seconds ago      Up 25 seconds       0.0.0.0:4444->4444/tcp   selenium-hub
 ```
 
 Or via browser `http://localhost:4444/grid/console`. You see grid console with one registerd node.
@@ -38,9 +38,9 @@ Or via browser `http://localhost:4444/grid/console`. You see grid console with o
 Every node has default configuration, one instance of firefox for webdriver and remote control. That will soon change. You can register next nodes.
 
 ```
-$ docker run -d --link selenium-hub:hub selenium/node-chrome:2.46.0
-$ docker run -d --link selenium-hub:hub selenium/node-chrome:2.46.0
-$ docker run -d --link selenium-hub:hub selenium/node-chrome:2.46.0
+$ docker run -d --link selenium-hub:hub selenium/node-chrome:2.47.1
+$ docker run -d --link selenium-hub:hub selenium/node-chrome:2.47.1
+$ docker run -d --link selenium-hub:hub selenium/node-chrome:2.47.1
 ```
 
 We can check it:
@@ -49,11 +49,11 @@ We can check it:
 $ docker ps
 
 CONTAINER ID        IMAGE                         COMMAND                  CREATED             STATUS              PORTS                    NAMES
-7cd5d8941cd1        selenium/node-chrome:2.46.0   "/opt/bin/entry_point"   3 seconds ago       Up 2 seconds                                 sleepy_kirch
-3c63aad77b15        selenium/node-chrome:2.46.0   "/opt/bin/entry_point"   4 seconds ago       Up 3 seconds                                 cranky_hodgkin
-ffbf4fed89a0        selenium/node-chrome:2.46.0   "/opt/bin/entry_point"   5 seconds ago       Up 4 seconds                                 ecstatic_meitner
-97bea0aeedf2        selenium/node-chrome:2.46.0   "/opt/bin/entry_point"   17 minutes ago      Up 17 minutes                                drunk_heisenberg
-643bb9385c85        selenium/hub:2.46.0           "/opt/bin/entry_point"   17 minutes ago      Up 17 minutes       0.0.0.0:4444->4444/tcp   selenium-hub
+7cd5d8941cd1        selenium/node-chrome:2.47.1   "/opt/bin/entry_point"   3 seconds ago       Up 2 seconds                                 sleepy_kirch
+3c63aad77b15        selenium/node-chrome:2.47.1   "/opt/bin/entry_point"   4 seconds ago       Up 3 seconds                                 cranky_hodgkin
+ffbf4fed89a0        selenium/node-chrome:2.47.1   "/opt/bin/entry_point"   5 seconds ago       Up 4 seconds                                 ecstatic_meitner
+97bea0aeedf2        selenium/node-chrome:2.47.1   "/opt/bin/entry_point"   17 minutes ago      Up 17 minutes                                drunk_heisenberg
+643bb9385c85        selenium/hub:2.47.1           "/opt/bin/entry_point"   17 minutes ago      Up 17 minutes       0.0.0.0:4444->4444/tcp   selenium-hub
 ```
 
 and via browser `http://localhost:4444/grid/console`. Now we have one hub and four nodes. We can see on stdout of selenium-hub container about details:
@@ -85,10 +85,6 @@ Copy `elasticsearch.yml` and `logging.yml` to `~/conf` directory.
 **Run Elasticsearch**
 ```
 $ docker run -d --name elastic -p 9200:9200 -p 9300:9300 -v ~/data:/data -v ~/conf:/conf itzg/elasticsearch
-```
-or with [Marvel](https://www.elastic.co/products/marvel) plugin
-```
-$ docker run -d --name elastic -e PLUGINS=elasticsearch/marvel/latest -p 9200:9200 -p 9300:9300 -v ~/data:/data -v ~/conf:/conf itzg/elasticsearch
 ```
 or with [Elastic HQ](http://www.elastichq.org/index.html) plugin
 ```
@@ -135,3 +131,37 @@ c4013f8a7ea2        itzg/kibana          "/start"            3 seconds ago      
 f370a70eff0a        itzg/elasticsearch   "/start"            10 minutes ago      Up 10 minutes       0.0.0.0:9200->9200/tcp, 0.0.0.0:9300->9300/tcp   elastic
 ```
 And in your browser `http://localhost:5601/`
+
+
+# Docker Compose
+
+**Download**
+```
+sudo curl -L -O https://github.com/docker/compose/releases/download/1.4.2/docker-compose-`uname -s`-`uname -m`
+```
+
+## Configuration Docker Compose
+
+**Docker Compose for SeleniumGrid & Logstash**
+```
+logstash:
+  image: itzg/logstash:latest
+  ports:
+    - "25826:25826/udp"
+  volumes:
+    - /home/rdpanek/logstashConf/:/conf
+seleniumHub:
+  image: selenium/hub:2.47.1
+  ports:
+    - "4444:4444"
+  environment:
+    - GRID_BROWSER_TIMEOUT=12000
+    - GRID_MAX_SESSION=30
+seleniumNode:
+  image: selenium/node-chrome:2.47.1
+  links:
+    - seleniumHub
+```
+
+## Run Docker Compose
+`docker-compose up -d`
