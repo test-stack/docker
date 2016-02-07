@@ -16,12 +16,12 @@ Let's go run [selenium grid via docker](https://github.com/SeleniumHQ/docker-sel
 
 **Run Selenium hub**
 ```
-$ docker run -d -p 4444:4444 --name selenium-hub -e GRID_BROWSER_TIMEOUT=120000 -e GRID_MAX_SESSION=30 selenium/hub:2.47.1
+$ docker run -d -p 4444:4444 --name selenium-hub -v /gridConfig/hub/config.json:/opt/selenium/config.json selenium/hub:2.50.0
 ```
 
 **Run Selenium node**
 ```
-$ docker run -d --link selenium-hub:hub -v /gridConfig/hub/config.json:/opt/selenium/config.json selenium/node-chrome:2.47.1
+$ docker run -d --link selenium-hub:hub -v /gridConfig/node/config.json:/opt/selenium/config.json selenium/node-firefox:2.50.0
 ```
 
 That's all :-) You can check successful execution:
@@ -29,11 +29,13 @@ That's all :-) You can check successful execution:
 $ docker ps
 
 CONTAINER ID        IMAGE                         COMMAND                  CREATED             STATUS              PORTS                    NAMES
-97bea0aeedf2        selenium/node-chrome:2.47.1   "/opt/bin/entry_point"   2 seconds ago       Up 2 seconds                                 drunk_heisenberg
-643bb9385c85        selenium/hub:2.47.1           "/opt/bin/entry_point"   25 seconds ago      Up 25 seconds       0.0.0.0:4444->4444/tcp   selenium-hub
+0e4ff7cee132        selenium/node-firefox:2.50.0   "/opt/bin/entry_point"   3 seconds ago       Up 3 seconds                                              prickly_turing
+649ee95b2dd7        selenium/hub:2.50.0            "/opt/bin/entry_point"   2 minutes ago       Up 2 minutes        0.0.0.0:4444->4444/tcp                selenium-hub
 ```
 
 Or via browser `http://localhost:4444/grid/console`. You see grid console with one registerd node.
+
+![Grid console](https://raw.githubusercontent.com/test-stack/docker/master/docs/gridConsole.png)
 
 Every node has default configuration, one instance of firefox for webdriver and remote control. That will soon change. You can register next nodes.
 
