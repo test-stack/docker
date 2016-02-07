@@ -1,0 +1,13 @@
+hub:
+  image: selenium/hub:2.50.0
+  ports:
+    - "4444:4444"
+  volumes:
+    - ~/docker/gridConfig/hub/config.json:/opt/selenium/config.json
+  name:
+ffNode:
+  image: selenium/node-firefox:2.50.0
+  volumes:
+    - ~/docker/gridConfig/node/config.json:/opt/selenium/config.json
+  links:
+    - hub
