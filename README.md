@@ -21,7 +21,7 @@ $ docker run -d -p 4444:4444 --name selenium-hub -e GRID_BROWSER_TIMEOUT=120000 
 
 **Run Selenium node**
 ```
-$ docker run -d --link selenium-hub:hub selenium/node-chrome:2.47.1
+$ docker run -d --link selenium-hub:hub -v /gridConfig/hub/config.json:/opt/selenium/config.json selenium/node-chrome:2.47.1
 ```
 
 That's all :-) You can check successful execution:
